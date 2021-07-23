@@ -1,32 +1,54 @@
+<!doctype html>
 <html>
-    <head>
-        <title>Crime Data Prototype</title>
-    </head>
-    <body>
+
+<head>
+    <title>Crime Data Prototype</title>
+</head>
+
+<body>
+
+    <h1>Crime Data</h1>
+
+    <form>
+
         <label for="lat">Lat</label>
-        <input id="lat" type="text" value="51.384880"/>     
-        
+        <input id="lat" type="text" value="51.3848" required maxlength="8"  />
+
         <label for="lng">Lng</label>
-        <input id="lng" type="text" value="-2.361970"/>
+        <input id="lng" type="text" value="-2.3619" required maxlength="8"/>
+
+        <button id="geolocate" type="button">My Location</button>
 
         <label for="date">Date</label>
-        <input id="date" type="month" value="2021-04"/>
+        <input id="date" type="month" value="2021-04" required />
 
         <button id="search" type="button">Search</button>
-        
-        <table id="results">
-            <tbody>                
-            </tbody>
-        </div>
 
-        <template>
+    </form>
+
+    <table id="results" hidden>
+        <thead>
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
+                <th scope="col">Category</th>
+                <th scope="col">Outcome</th>
+                <th scope="col">Date</th>
             </tr>
-        </template>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 
-        <script src="index.js"></script>
-    </body>
+    <template>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </template>
+
+    </div>
+
+    <script src="index.js"></script>
+</body>
+
 </html>
