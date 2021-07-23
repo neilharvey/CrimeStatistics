@@ -1,5 +1,14 @@
 (function () {
-    
+
+    // api
+
+    function getStreetLevelCrimes(lat, lng, date) {
+
+        return fetch(`https://data.police.uk/api/crimes-street/all-crime?date=${date}&lat=${lat}&lng=${lng}`)
+            .then(response => response.json())
+
+    }
+
     function getCrimesAtLocation(lat, lng, date) {
 
         return fetch(`https://data.police.uk/api/crimes-at-location?date=${date}&lat=${lat}&lng=${lng}`)
@@ -9,42 +18,67 @@
 
     function show(crimes) {
 
+        let table = document.querySelector("#results");
         let tbody = document.querySelector("tbody");
 
-        while(tbody.firstChild) {
+        while (tbody.firstChild) {
             tbody.removeChild(tbody.firstChild);
         }
 
         let template = document.querySelector('template');
 
-        for(var i = 0; i < crimes.length; i++) {
+        for (var category in crimes) {
 
             let clone = template.content.cloneNode(true);
             let td = clone.querySelectorAll("td");
-            console.log(crimes[i]);
-            td[0].textContent = crimes[i].category;
-            td[1].textContent = crimes[i].outcome_status.category;
-            td[2].textContent = crimes[i].outcome_status.date;
+
+            td[0].textContent = category;
+            td[1].textContent = crimes[category].length;
 
             tbody.appendChild(clone);
 
         }
 
+        table.hidden = false;
+
+    }
+
+    function group(xs, key) {
+        return xs.reduce(function (rv, x) {
+            (rv[x[key]] = rv[x[key]] || []).push(x);
+            return rv;
+        }, {});
     }
 
     function search() {
 
-        var lat = document.getElementById("lat").value;
-        var lng = document.getElementById("lng").value;
-        var date = document.getElementById("date").value;
+        let lat = document.getElementById("lat").value;
+        let lng = document.getElementById("lng").value;
+        let date = document.getElementById("date").value;
 
-        getCrimesAtLocation(lat, lng, date)
+        getStreetLevelCrimes(lat, lng, date)
+            .then(data => group(data,"category"))
             .then(data => show(data));
 
     }
 
-    document.getElementById("search").addEventListener("click", function() {
+    function geolocate() {
+
+        navigator.geolocation.getCurrentPosition(function (position) {
+
+            document.getElementById("lat").value = position.coords.latitude.toFixed(5);
+            document.getElementById("lng").value = position.coords.longitude.toFixed(5);
+
+        });
+
+    }
+
+    document.getElementById("search").addEventListener("click", function (e) {
         search();
     })
 
-  })();
+    document.getElementById("geolocate").addEventListener("click", function () {
+        geolocate();
+    })
+
+})();
