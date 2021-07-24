@@ -1,0 +1,14 @@
+{
+  "name": "crime-data",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "jest": "^27.0.6"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.14.5"
+  },
+  "scripts": {
+    "test": "jest"
+  }
+}
