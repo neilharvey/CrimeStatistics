@@ -1,6 +1,6 @@
 import { group } from './util.js'
 
-test('grouped empty array is empty object', () => {
+test('groups an empty array to an empty object', () => {
 
     const data = [];
 
