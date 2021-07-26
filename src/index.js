@@ -1,7 +1,7 @@
 import * as ApiClient from './api-client.js';
 import { group } from './util.js'
 
-function show(crimes) {
+function show(crimes, categories) {
 
     let table = document.querySelector("#results");
     let tbody = document.querySelector("tbody");
@@ -17,7 +17,7 @@ function show(crimes) {
         let clone = template.content.cloneNode(true);
         let td = clone.querySelectorAll("td");
 
-        td[0].textContent = category;
+        td[0].textContent = categories[category][0].name;
         td[1].textContent = crimes[category].length;
 
         tbody.appendChild(clone);
@@ -25,19 +25,23 @@ function show(crimes) {
     }
 
     table.hidden = false;
+    table.parentElement.parentElement.hidden = false;
 
 }
 
-function search() {
+async function search() {
 
     let lat = document.getElementById("lat").value;
     let lng = document.getElementById("lng").value;
     let date = document.getElementById("date").value;
 
-    ApiClient.getStreetLevelCrimes(lat, lng, date)
-        .then(data => group(data, "category"))
-        .then(data => show(data));
+    let categories = await ApiClient.getCrimeCategories(date);
+    categories = group(categories, "url");
 
+    let crimes = await ApiClient.getStreetLevelCrimes(lat, lng, date);
+    crimes = group(crimes, "category");
+
+    show(crimes, categories);
 }
 
 function geolocate() {
@@ -51,10 +55,23 @@ function geolocate() {
 
 }
 
+function setLastUpdated() {
+
+    ApiClient.getLastUpdated()
+        .then(lastUpdated => document.getElementById("date").value = lastUpdated.date.substring(0, 7));
+
+}
+
 document.getElementById("search").addEventListener("click", function (e) {
-    search();
+    let form = document.getElementById("search-form");
+    form.reportValidity();
+    if (form.checkValidity()) {
+        search();
+    }
 });
 
 document.getElementById("geolocate").addEventListener("click", function () {
     geolocate();
 });
+
+setLastUpdated();

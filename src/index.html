@@ -2,55 +2,111 @@
 <html>
 
 <head>
-    <title>Crime Data Prototype</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <title>Crime Data</title>
 </head>
 
-<body>
+<body class="bg-light">
 
-    <h1>Crime Data</h1>
+    <nav class="navbar navbar-dark bg-primary">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">Crime Data</span>
+        </div>
+    </nav>
 
-    <form>
+    <div class="bg-primary pb-5 text-light">
 
-        <label for="lat">Lat</label>
-        <input id="lat" type="text" value="51.3848" required maxlength="8"  />
+        <div class="container">
 
-        <label for="lng">Lng</label>
-        <input id="lng" type="text" value="-2.3619" required maxlength="8"/>
+            <h1>View local crime statistics</h1>
 
-        <button id="geolocate" type="button">My Location</button>
+            <form id="search-form" class="row g-3" novalidate>
 
-        <label for="date">Date</label>
-        <input id="date" type="month" value="2021-04" required />
+                <div class="col-3">
 
-        <button id="search" type="button">Search</button>
+                    <label for="lat" class="form-label">Latitude</label>
+                    <input id="lat" type="text" class="form-control" required maxlength="8" />
 
-    </form>
+                </div>
 
-    <table id="results" hidden>
-        <thead>
-            <tr>
-                <th scope="col">Category</th>
-                <th scope="col">Outcome</th>
-                <th scope="col">Date</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+                <div class="col-3">
 
-    <template>
-        <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-    </template>
+                    <label for="lng" class="form-label">Longitude</label>
+                    <div class="input-group">
+                        <input id="lng" type="text" class="form-control" required maxlength="8" />
+                        <div class="input-group-append">
+                            <button id="geolocate" type="button" class="btn btn-light">
+                                <i class="bi bi-geo-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-3">
+
+                    <label for="date" class="form-label">Date</label>
+                    <input id="date" type="month" class="form-control" required />
+
+                </div>
+
+                <div class="col-3 d-flex">
+                    <button id="search" type="button" class="btn btn-secondary align-self-end">Search</button>
+                </div>
+
+            </form>
+
+        </div>
 
     </div>
+
+    <div class="pt-5">
+
+        <div class="container">
+
+            <div class="card" hidden>
+
+                <div class="card-body">
+
+                    <table id="results" class="table bg-white" hidden>
+                        <thead>
+                            <tr>
+                                <th scope="col">Category</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+        
+                    <template>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </template>
+
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
+        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
+        crossorigin="anonymous"></script>
 
     <script src="api-client.js" type="module"></script>
     <script src="util.js" type="module"></script>
     <script src="index.js" type="module"></script>
+
 </body>
 
 </html>

@@ -13,6 +13,7 @@ export function getStreetLevelCrimes(lat, lng, date) {
 } 
 
 function getJson(relativeUrl) {
-    return fetch(`${baseUrl}/${relativeUrl}`)
+    let url = `${baseUrl}/${relativeUrl}`;
+    return fetch(url)
         .then(response => response.json())
 }
