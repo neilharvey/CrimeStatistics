@@ -1,84 +1,60 @@
-(function () {
+import * as ApiClient from './api-client.js';
+import { group } from './util.js'
 
-    // api
+function show(crimes) {
 
-    function getStreetLevelCrimes(lat, lng, date) {
+    let table = document.querySelector("#results");
+    let tbody = document.querySelector("tbody");
 
-        return fetch(`https://data.police.uk/api/crimes-street/all-crime?date=${date}&lat=${lat}&lng=${lng}`)
-            .then(response => response.json())
+    while (tbody.firstChild) {
+        tbody.removeChild(tbody.firstChild);
+    }
+
+    let template = document.querySelector('template');
+
+    for (var category in crimes) {
+
+        let clone = template.content.cloneNode(true);
+        let td = clone.querySelectorAll("td");
+
+        td[0].textContent = category;
+        td[1].textContent = crimes[category].length;
+
+        tbody.appendChild(clone);
 
     }
 
-    function getCrimesAtLocation(lat, lng, date) {
+    table.hidden = false;
 
-        return fetch(`https://data.police.uk/api/crimes-at-location?date=${date}&lat=${lat}&lng=${lng}`)
-            .then(response => response.json())
+}
 
-    }
+function search() {
 
-    function show(crimes) {
+    let lat = document.getElementById("lat").value;
+    let lng = document.getElementById("lng").value;
+    let date = document.getElementById("date").value;
 
-        let table = document.querySelector("#results");
-        let tbody = document.querySelector("tbody");
+    ApiClient.getStreetLevelCrimes(lat, lng, date)
+        .then(data => group(data, "category"))
+        .then(data => show(data));
 
-        while (tbody.firstChild) {
-            tbody.removeChild(tbody.firstChild);
-        }
+}
 
-        let template = document.querySelector('template');
+function geolocate() {
 
-        for (var category in crimes) {
+    navigator.geolocation.getCurrentPosition(function (position) {
 
-            let clone = template.content.cloneNode(true);
-            let td = clone.querySelectorAll("td");
+        document.getElementById("lat").value = position.coords.latitude.toFixed(5);
+        document.getElementById("lng").value = position.coords.longitude.toFixed(5);
 
-            td[0].textContent = category;
-            td[1].textContent = crimes[category].length;
+    });
 
-            tbody.appendChild(clone);
+}
 
-        }
+document.getElementById("search").addEventListener("click", function (e) {
+    search();
+});
 
-        table.hidden = false;
-
-    }
-
-    function group(xs, key) {
-        return xs.reduce(function (rv, x) {
-            (rv[x[key]] = rv[x[key]] || []).push(x);
-            return rv;
-        }, {});
-    }
-
-    function search() {
-
-        let lat = document.getElementById("lat").value;
-        let lng = document.getElementById("lng").value;
-        let date = document.getElementById("date").value;
-
-        getStreetLevelCrimes(lat, lng, date)
-            .then(data => group(data,"category"))
-            .then(data => show(data));
-
-    }
-
-    function geolocate() {
-
-        navigator.geolocation.getCurrentPosition(function (position) {
-
-            document.getElementById("lat").value = position.coords.latitude.toFixed(5);
-            document.getElementById("lng").value = position.coords.longitude.toFixed(5);
-
-        });
-
-    }
-
-    document.getElementById("search").addEventListener("click", function (e) {
-        search();
-    })
-
-    document.getElementById("geolocate").addEventListener("click", function () {
-        geolocate();
-    })
-
-})();
+document.getElementById("geolocate").addEventListener("click", function () {
+    geolocate();
+});
