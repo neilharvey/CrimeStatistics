@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
-    <title>Crime Data</title>
+    <title>Crime Statistics</title>
 </head>
 
 <body class="bg-light">
@@ -19,18 +19,13 @@
 
             <form id="search-form" class="row g-3" novalidate>
 
-                <div class="col-3">
+                <div class="col-6">
 
-                    <label for="lat" class="form-label">Latitude</label>
-                    <input id="lat" type="text" class="form-control" required maxlength="8" />
-
-                </div>
-
-                <div class="col-3">
-
-                    <label for="lng" class="form-label">Longitude</label>
+                    <label for="location" class="form-label">Location</label>
                     <div class="input-group">
-                        <input id="lng" type="text" class="form-control" required maxlength="8" />
+                        <input id="location" type="text" class="form-control" required />
+                        <input id="lat" type="hidden" />
+                        <input id="lng" type="hidden" />
                         <div class="input-group-append">
                             <button id="geolocate" type="button" class="btn btn-light">
                                 <i class="bi bi-geo-alt"></i>
@@ -89,19 +84,16 @@
 
             </div>
 
-
-
         </div>
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
-        integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
-        crossorigin="anonymous"></script>
-
     <script src="api-client.js" type="module"></script>
     <script src="util.js" type="module"></script>
+    <script src="autocomplete.js" type="module"></script>
     <script src="index.js" type="module"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&v=weekly"></script>
 
 </body>
 

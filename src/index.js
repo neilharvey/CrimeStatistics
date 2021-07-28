@@ -43,15 +43,6 @@ async function search() {
     show(crimes, categories);
 }
 
-async function setLastUpdated() {
-
-    let lastUpdated = await ApiClient.getLastUpdated();
-    let lastUpdatedMonth = lastUpdated.date.substring(0, 7);
-
-    document.getElementById("date").value = lastUpdatedMonth;
-    document.getElementById("date").max = lastUpdatedMonth;
-}
-
 document.getElementById("search").addEventListener("click", function (e) {
     let form = document.getElementById("search-form");
     if (form.reportValidity()) {
@@ -65,9 +56,23 @@ document.getElementById("geolocate").addEventListener("click", function () {
 
         document.getElementById("lat").value = position.coords.latitude.toFixed(5);
         document.getElementById("lng").value = position.coords.longitude.toFixed(5);
+        document.getElementById("location").value = "My Location";
 
     });
 
 });
+
+document.getElementById("location").addEventListener("focus", function() {
+    this.value = "";
+})
+
+async function setLastUpdated() {
+
+    let lastUpdated = await ApiClient.getLastUpdated();
+    let lastUpdatedMonth = lastUpdated.date.substring(0, 7);
+
+    document.getElementById("date").value = lastUpdatedMonth;
+    document.getElementById("date").max = lastUpdatedMonth;
+}
 
 setLastUpdated();
