@@ -26,7 +26,6 @@ function show(crimes, categories) {
 
     table.hidden = false;
     table.parentElement.parentElement.hidden = false;
-
 }
 
 async function search() {
@@ -44,7 +43,23 @@ async function search() {
     show(crimes, categories);
 }
 
-function geolocate() {
+async function setLastUpdated() {
+
+    let lastUpdated = await ApiClient.getLastUpdated();
+    let lastUpdatedMonth = lastUpdated.date.substring(0, 7);
+
+    document.getElementById("date").value = lastUpdatedMonth;
+    document.getElementById("date").max = lastUpdatedMonth;
+}
+
+document.getElementById("search").addEventListener("click", function (e) {
+    let form = document.getElementById("search-form");
+    if (form.reportValidity()) {
+        search();
+    }
+});
+
+document.getElementById("geolocate").addEventListener("click", function () {
 
     navigator.geolocation.getCurrentPosition(function (position) {
 
@@ -53,25 +68,6 @@ function geolocate() {
 
     });
 
-}
-
-function setLastUpdated() {
-
-    ApiClient.getLastUpdated()
-        .then(lastUpdated => document.getElementById("date").value = lastUpdated.date.substring(0, 7));
-
-}
-
-document.getElementById("search").addEventListener("click", function (e) {
-    let form = document.getElementById("search-form");
-    form.reportValidity();
-    if (form.checkValidity()) {
-        search();
-    }
-});
-
-document.getElementById("geolocate").addEventListener("click", function () {
-    geolocate();
 });
 
 setLastUpdated();
