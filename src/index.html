@@ -24,8 +24,8 @@
                     <label for="location" class="form-label">Location</label>
                     <div class="input-group">
                         <input id="location" type="text" class="form-control" required />
-                        <input id="lat" type="hidden" />
-                        <input id="lng" type="hidden" />
+                        <input id="lat" type="hidden" required />
+                        <input id="lng" type="hidden" required />
                         <div class="input-group-append">
                             <button id="geolocate" type="button" class="btn btn-light">
                                 <i class="bi bi-geo-alt"></i>
@@ -40,10 +40,6 @@
                     <label for="date" class="form-label">Date</label>
                     <input id="date" type="month" class="form-control" required />
 
-                </div>
-
-                <div class="col-3 d-flex">
-                    <button id="search" type="button" class="btn btn-secondary align-self-end">Search</button>
                 </div>
 
             </form>
@@ -89,11 +85,10 @@
     </div>
 
     <script src="api-client.js" type="module"></script>
-    <script src="util.js" type="module"></script>
-    <script src="autocomplete.js" type="module"></script>
-    <script src="index.js" type="module"></script>
+    <script src="form.js" type="module"></script>
+    <script src="search.js" type="module"></script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&v=weekly"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
 
 </body>
 
