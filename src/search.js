@@ -51,7 +51,7 @@ function merge(crimes, categories) {
     return crimes;
 }
 
-function group(data, keySelector) {
+export function group(data, keySelector) {
 
     let map = new Map();
     for (let i = 0; i < data.length; i++) {

@@ -126,7 +126,7 @@ test('gets street level crimes', async () => {
 
     fetch.mockOnce(JSON.stringify(expected));
 
-    const categories = await ApiClient.getStreetLevelCrimes(52.629729, -1.131592, "2017-01");
+    const categories = await ApiClient.getStreetLevelOutcomes(52.629729, -1.131592, "2017-01");
 
     expect(fetch.mock.calls[0][0]).toEqual("https://data.police.uk/api/outcomes-at-location?date=2017-01&lat=52.629729&lng=-1.131592");
     expect(categories).toEqual(expected);
