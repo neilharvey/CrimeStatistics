@@ -6,12 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="index.css">
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
     <title>Crime Statistics</title>
 </head>
 
 <body class="bg-light">
 
-    <div class="bg-primary pt-5 pb-5 text-light">
+    <section class="bg-primary pt-5 pb-5 text-light">
 
         <div class="container">
 
@@ -46,35 +50,42 @@
 
         </div>
 
-    </div>
+    </section>
 
-    <div class="pt-5">
+    <section id="results" class="container pt-5" hidden>
 
-        <div class="container">
+        <div class="row">
+            <p class="lead">
+                Showing crimes within a 1 mile radius</a>
+            </p>
+        </div>
 
-            <div class="card" hidden>
+        <div class="row">
 
-                <div class="card-body">
+            <div class="col-6">
 
-                    <h6 class="title text-muted">Crimes in One Mile Radius</h6>
+                <div class="card">
 
-                    <table id="results" class="table bg-white" hidden>
-                        <thead>
-                            <tr>
-                                <th scope="col">Category</th>
-                                <th scope="col">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <div class="card-body">
 
-                    <template>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </template>
+                        <h6 class="title text-muted">Crimes</h6>
+                        <div id="crimes" class="chart d-flex justify-content-center"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-6">
+
+                <div class="card">
+
+                    <div class="card-body">
+
+                        <h6 class="title text-muted">Outcomes</h6>
+                        <div id="outcomes" class="chart d-flex justify-content-center"></div>
+                    </div>
 
                 </div>
 
@@ -82,13 +93,26 @@
 
         </div>
 
+        <footer class="row">
+            <p class="text-muted">Data provided by <a href="https://data.police.uk"
+                    target="_blank">https://data.police.uk</a></p>
+            </div>
+
+    </section>
+
+    <template id="spinner">
+        <div class="spinner-border text-secondary align-self-center" role="status"></div>
+    </template>
+
     </div>
 
     <script src="api-client.js" type="module"></script>
     <script src="form.js" type="module"></script>
     <script src="search.js" type="module"></script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places"></script>
+    <footer>
+
+    </footer>
 
 </body>
 

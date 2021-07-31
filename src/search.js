@@ -1,50 +1,94 @@
 import * as ApiClient from './api-client.js';
 
- export async function search() {
+let categories = undefined;
+
+export async function search() {
+
+    let results = document.getElementById("results");
+    results.hidden = false; 
 
     let lat = document.getElementById("lat").value;
     let lng = document.getElementById("lng").value;
     let date = document.getElementById("date").value;
 
-    let categories = await ApiClient.getCrimeCategories(date);
-    categories = group(categories, "url");
-
-    let crimes = await ApiClient.getStreetLevelCrimes(lat, lng, date);
-    crimes = group(crimes, "category");
-
-    show(crimes, categories);
-}
-
-export function group(data, key) {
-    return data.reduce(function (rv, x) {
-        (rv[x[key]] = rv[x[key]] || []).push(x);
-        return rv;
-    }, {});
-}
-
-function show(crimes, categories) {
-
-    let table = document.querySelector("#results");
-    let tbody = document.querySelector("tbody");
-
-    while (tbody.firstChild) {
-        tbody.removeChild(tbody.firstChild);
+    if(!categories) {
+        categories = await ApiClient.getCrimeCategories(date);
     }
 
-    let template = document.querySelector('template');
+    showSpinner('crimes');
+    ApiClient.getStreetLevelCrimes(lat, lng, date)
+        .then(crimes => merge(crimes, categories))
+        .then(crimes => group(crimes, crime => crime.category))
+        .then(map => showPieChart('crimes', map));
 
-    for (var category in crimes) {
+    showSpinner('outcomes');
+    ApiClient.getStreetLevelOutcomes(lat, lng, date)
+        .then(outcomes => group(outcomes, outcome => outcome.category.name))
+        .then(map => showPieChart('outcomes', map));
+}
 
-        let clone = template.content.cloneNode(true);
-        let td = clone.querySelectorAll("td");
+function showSpinner(id) {
 
-        td[0].textContent = categories[category][0].name;
-        td[1].textContent = crimes[category].length;
+    let spinner = document.getElementById("spinner");
+    let clone = spinner.content.cloneNode(true);
 
-        tbody.appendChild(clone);
+    let target = document.getElementById(id);
+    target.replaceChildren(clone);
 
+}
+
+function merge(crimes, categories) {
+
+    let map = new Map();
+    for (let i = 0; i < categories.length; i++) {
+        map.set(categories[i].url, categories[i].name);
     }
 
-    table.hidden = false;
-    table.parentElement.parentElement.hidden = false;
+    for (let i = 0; i < crimes.length; i++) {
+        crimes[i].category = map.get(crimes[i].category);
+    }
+
+    return crimes;
+}
+
+function group(data, keySelector) {
+
+    let map = new Map();
+    for (let i = 0; i < data.length; i++) {
+        let key = keySelector(data[i]);
+        let total = map.get(key) || 0;
+        total++;
+        map.set(key, total);
+    }
+
+    return map;
+}
+
+function showPieChart(id, map) {
+
+    google.charts.load('current', { 'packages': ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+        let data = new google.visualization.DataTable();
+        data.addColumn('string', 'Category');
+        data.addColumn('number', 'Total');
+
+        map.forEach(function (value, key) {
+            data.addRow([key, value]);
+        });
+
+        let chart = new google.visualization.PieChart(document.getElementById(id));
+        let options = {
+            fontName: "system-ui",
+            sliceVisibilityThreshold: .03,
+            pieSliceText: "value",
+            chartArea: { left: '10%', top: 0, width: '80%', height: '100%' },
+            legend: { position: 'right', alignment: 'center' }
+
+        };
+
+        chart.draw(data, options);
+    }
 }

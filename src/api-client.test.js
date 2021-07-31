@@ -93,3 +93,41 @@ test('gets street level crimes', async () => {
     expect(fetch.mock.calls[0][0]).toEqual("https://data.police.uk/api/crimes-street/all-crime?lat=52.629729&lng=-1.131592&date=2017-01");
     expect(categories).toEqual(expected);
 });
+
+test('gets street level crimes', async () => {
+
+    const expected = [
+        {
+            "category": {
+                "code": "unable-to-prosecute",
+                "name": "Unable to prosecute suspect"
+            },
+            "date": "2017-01",
+            "person_id": null,
+            "crime": {
+                "category": "theft-from-the-person",
+                "location_type": "Force",
+                "location": {
+                    "latitude": "52.634474",
+                    "street": {
+                        "id": 883498,
+                        "name": "On or near Kate Street"
+                    },
+                    "longitude": "-1.149197"
+                },
+                "context": "",
+                "persistent_id": "a5a98275facee535b959b236130f5ec05205869fb3d0804c9b14296fcd0bce46",
+                "id": 53566126,
+                "location_subtype": "ROAD",
+                "month": "2016-12"
+            }
+        }
+    ]
+
+    fetch.mockOnce(JSON.stringify(expected));
+
+    const categories = await ApiClient.getStreetLevelCrimes(52.629729, -1.131592, "2017-01");
+
+    expect(fetch.mock.calls[0][0]).toEqual("https://data.police.uk/api/outcomes-at-location?date=2017-01&lat=52.629729&lng=-1.131592");
+    expect(categories).toEqual(expected);
+});
